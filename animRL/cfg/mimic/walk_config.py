@@ -18,8 +18,6 @@ class WalkCfg(MimicCfg):
     class rewards(MimicCfg.rewards):
         class terms:
 
-            # ----------- TODO 1.3: tune the hyperparameters
-            # reward_name = [sigma, tolerance]
             joint_targets_rate = [5.0, 0.0]
 
             track_base_height = [0.1, 0.0]
@@ -27,7 +25,6 @@ class WalkCfg(MimicCfg):
             track_joint_pos = [1.5, 0.0]
             track_base_vel = [1.0, 0.0]
             track_ee_pos = [0.2, 0.0]
-            # ----------- End of implementation
 
     class control(MimicCfg.control):
         control_type = 'P'  # P: position, V: velocity, T: torques
@@ -58,7 +55,6 @@ class WalkTrainCfg(MimicTrainCfg):
 
     class algorithm(MimicTrainCfg.algorithm):
 
-        # ----------- TODO 1.3: tune the hyperparameters
         learning_rate = 5.e-4
         schedule = 'adaptive'
 
@@ -68,11 +64,8 @@ class WalkTrainCfg(MimicTrainCfg):
         desired_kl = 0.01
 
         bootstrap = True
-        # ----------- End of implementation
 
     class policy(MimicTrainCfg.policy):
 
-        # ----------- TODO 1.3: tune the hyperparameters
         log_std_init = -1.0
-        activation = 'elu'  # can be elu, relu, selu, crelu, lrelu, tanh, sigmoid
-        # ----------- End of implementation
+        activation = 'elu'

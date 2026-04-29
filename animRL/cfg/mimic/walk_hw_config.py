@@ -8,8 +8,6 @@ class WalkHWCfg(MimicCfg):
         num_actions = 12
         num_observations = 43
         obs_history_len = 5
-        # ----------- End of implementation
-
         episode_length = 150  # episode length
 
         reference_state_initialization = True  # initialize state from reference data
@@ -20,8 +18,6 @@ class WalkHWCfg(MimicCfg):
     class rewards(MimicCfg.rewards):
         class terms:
 
-            # ----------- TODO 1.3: tune the hyperparameters
-            # reward_name = [sigma, tolerance]
             joint_targets_rate = [5.0, 0.0]
 
             track_base_height = [0.1, 0.0]
@@ -29,7 +25,6 @@ class WalkHWCfg(MimicCfg):
             track_joint_pos = [1.8, 0.0]
             track_base_vel = [1.0, 0.0]
             track_ee_pos = [0.25, 0.0]
-            # ----------- End of implementation
 
     class control(MimicCfg.control):
         control_type = 'P'  # P: position, V: velocity, T: torques
@@ -51,7 +46,6 @@ class WalkHWCfg(MimicCfg):
         }
 
     class domain_rand(MimicCfg.domain_rand):
-        # ----------- TODO 3.1: add domain randomization
         randomize_friction = RANDOMIZE
         friction_range = [0.6, 1.2] if RANDOMIZE else [0.9, 1.0]
         randomize_base_mass = RANDOMIZE
@@ -64,8 +58,6 @@ class WalkHWCfg(MimicCfg):
         dynamic_randomization = 0.0
         obs_noise_scale = 0.01
 
-        # ----------- End of implementation
-
 
 
 class WalkHWTrainCfg(MimicTrainCfg):
@@ -77,7 +69,6 @@ class WalkHWTrainCfg(MimicTrainCfg):
 
     class algorithm(MimicTrainCfg.algorithm):
 
-        # ----------- TODO 1.3: tune the hyperparameters
         learning_rate = 3.e-4
         schedule = 'adaptive'
 
@@ -87,11 +78,8 @@ class WalkHWTrainCfg(MimicTrainCfg):
         desired_kl = 0.02
 
         bootstrap = True
-        # ----------- End of implementation
 
     class policy(MimicTrainCfg.policy):
 
-        # ----------- TODO 1.3: tune the hyperparameters
         log_std_init = -1.0
-        activation = 'elu'  # can be elu, relu, selu, crelu, lrelu, tanh, sigmoid
-        # ----------- End of implementation
+        activation = 'elu'

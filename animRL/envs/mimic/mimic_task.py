@@ -89,11 +89,11 @@ class MimicTask(BaseTask):
             self._reset_root_states_from_frames(env_ids, self.target_frames[env_ids])
 
         else:
-            # ----------- TODO 1.2: Manage phase reset
+
             self.reset_phase[env_ids] = 0.0
             self.phase[env_ids] = 0.0
             self.target_frames[env_ids] = self.motion_loader.get_frame_at_phase(self.phase[env_ids])
-            # ----------- End of implementation
+
 
             self._reset_dofs(env_ids)
             self._reset_root_states(env_ids)
@@ -183,9 +183,9 @@ class MimicTask(BaseTask):
         # time out
         self.time_out_buf = self.episode_length_buf > self.max_episode_length
 
-        # ----------- TODO 1.2: Implement additional timeout conditions
+
         self.time_out_buf |= self.phase >= 1.0
-        # ----------- End of implementation
+
 
         self.reset_buf |= self.time_out_buf
 
@@ -206,12 +206,12 @@ class MimicTask(BaseTask):
         self.check_termination()
         self.compute_reward()
 
-        # ----------- TODO 1.2: manage phase for next step
+
         self.phase += self.phase_rate
         self.target_frames = self.motion_loader.get_frame_at_phase(
             torch.clamp(self.phase, 0, 1.0 - 1e-6)
         )
-        # ----------- End of implementation
+
 
         # self.process_keystroke()
 

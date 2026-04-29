@@ -46,7 +46,7 @@ class REWARDS:
         target_frames = data['target_frames']
         reward = torch.zeros(0).to(data['root_states'].device)
 
-        # ----------- TODO 1.1: implement the reward
+
         target_rot = motion_loader.get_root_rot(target_frames)
         target_rot_no_yaw = get_quat_no_yaw(target_rot)
         base_quat_no_yaw = get_quat_no_yaw(data['base_quat'])
@@ -54,7 +54,7 @@ class REWARDS:
         ori_error = quat_to_angle(q_diff)
         ori_error *= (ori_error > tolerance)
         reward = torch.exp(-torch.square(ori_error / sigma))
-        # ----------- End of implementation
+
         return reward
 
     @staticmethod
@@ -63,12 +63,12 @@ class REWARDS:
         target_frames = data['target_frames']
         reward = torch.zeros(0).to(data['root_states'].device)
 
-        # ----------- TODO 1.1: implement the reward
+
         target_joint_pos = motion_loader.get_joint_pose(target_frames)
         joint_pos_error = torch.norm(data['dof_pos'] - target_joint_pos, dim=-1)
         joint_pos_error *= (joint_pos_error > tolerance)
         reward = torch.exp(-torch.square(joint_pos_error / sigma))
-        # ----------- End of implementation
+
         return reward
 
     @staticmethod
@@ -77,12 +77,12 @@ class REWARDS:
         target_frames = data['target_frames']
         reward = torch.zeros(0).to(data['root_states'].device)
 
-        # ----------- TODO 1.1: implement the reward
+
         target_lin_vel = motion_loader.get_linear_vel(target_frames)
         vel_error = torch.norm(data['base_lin_vel'] - target_lin_vel, dim=-1)
         vel_error *= (vel_error > tolerance)
         reward = torch.exp(-torch.square(vel_error / sigma))
-        # ----------- End of implementation
+
         return reward
 
     @staticmethod
@@ -91,21 +91,21 @@ class REWARDS:
         target_frames = data['target_frames']
         reward = torch.zeros(0).to(data['root_states'].device)
 
-        # ----------- TODO 1.1: implement the reward
+
         target_ee_local = motion_loader.get_ee_pos_local(target_frames).reshape(-1, data['num_ee'], 3)
         ee_error = torch.norm(data['ee_local'] - target_ee_local, dim=-1).mean(dim=-1)
         ee_error *= (ee_error > tolerance)
         reward = torch.exp(-torch.square(ee_error / sigma))
-        # ----------- End of implementation
+
         return reward
 
     @staticmethod
     def reward_joint_targets_rate(data, sigma, tolerance=0.0):
         reward = torch.zeros(0).to(data['root_states'].device)
 
-        # ----------- TODO 1.1: implement the reward
+
         rate = data['joint_targets_rate'].squeeze(-1)
         rate *= (rate > tolerance)
         reward = torch.exp(-torch.square(rate / sigma))
-        # ----------- End of implementation
+
         return reward
