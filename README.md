@@ -233,10 +233,6 @@ Pre-trained checkpoints for all three stages are available in `animRL/results/ta
 - Peng, Xue Bin, et al. *"DeepMimic: Example-Guided Deep Reinforcement Learning of Physics-Based Character Skills."* ACM Transactions on Graphics (TOG) 37.4 (2018): 1-14.
 - Schulman, John, et al. *"Proximal Policy Optimization Algorithms."* arXiv preprint arXiv:1707.06347 (2017).
 
-## Acknowledgments
-
-Developed as part of the Computational Models of Motion course at ETH Zurich. Robot model and environment scaffolding by Fatemeh Zargarbashi.
-
 ## License
 
 This project is for educational and research purposes.
