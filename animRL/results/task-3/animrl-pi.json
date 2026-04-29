@@ -1,0 +1,284 @@
+{
+  "train_cfg": {
+    "algorithm": {
+      "bootstrap": true,
+      "clip_param": 0.2,
+      "desired_kl": 0.02,
+      "entropy_coef": 0.01,
+      "gamma": 0.99,
+      "lam": 0.95,
+      "learning_rate": 0.0003,
+      "max_grad_norm": 1.0,
+      "num_learning_epochs": 5,
+      "num_mini_batches": 4,
+      "schedule": "adaptive",
+      "surrogate_coef": 1,
+      "use_clipped_value_loss": true,
+      "value_loss_coef": 0.5
+    },
+    "algorithm_name": "PPO",
+    "init_member_classes": {},
+    "policy": {
+      "activation": "elu",
+      "actor_hidden_dims": [
+        512,
+        256
+      ],
+      "critic_hidden_dims": [
+        512,
+        256
+      ],
+      "log_std_init": -1.0
+    },
+    "runner": {
+      "checkpoint": -1,
+      "experiment_name": "animrl-pi",
+      "load_run": -1,
+      "max_iterations": 4000,
+      "normalize_observation": true,
+      "num_steps_per_env": 24,
+      "record_gif": true,
+      "record_gif_interval": 100,
+      "record_iters": 10,
+      "run_name": "walk-hw",
+      "save_interval": 100,
+      "wandb": true,
+      "wandb_group": "default"
+    },
+    "runner_class_name": ""
+  },
+  "env_cfg": {
+    "asset": {
+      "angular_damping": 0.0,
+      "armature": 0.0,
+      "collapse_fixed_joints": true,
+      "default_dof_drive_mode": 1,
+      "density": 0.001,
+      "disable_gravity": false,
+      "ee_offsets": {
+        "l_ankle_roll_link": [
+          0.0,
+          0.0,
+          -0.01
+        ],
+        "r_ankle_roll_link": [
+          0.0,
+          0.0,
+          -0.01
+        ]
+      },
+      "file": "{ROOT_DIR}/resources/robots/pi_12dof/pi_12dof.urdf",
+      "fix_base_link": false,
+      "flip_visual_attachments": false,
+      "foot_name": null,
+      "linear_damping": 0.0,
+      "max_angular_velocity": 1000.0,
+      "max_linear_velocity": 1000.0,
+      "name": null,
+      "penalize_contacts_on": [],
+      "replace_cylinder_with_capsule": true,
+      "self_collisions": 1,
+      "terminate_after_contacts_on": [
+        "base_link"
+      ],
+      "thickness": 0.01
+    },
+    "control": {
+      "clip_joint_target": 100.0,
+      "control_type": "P",
+      "damping": {
+        "hip_pitch_joint": 0.8,
+        "hip_roll_joint": 0.5,
+        "thigh_joint": 0.5,
+        "calf_joint": 0.8,
+        "ankle_pitch_joint": 0.8,
+        "ankle_roll_joint": 0.5
+      },
+      "decimation": 4,
+      "scale_joint_target": 0.2,
+      "stiffness": {
+        "hip_pitch_joint": 50.0,
+        "hip_roll_joint": 25.0,
+        "thigh_joint": 25.0,
+        "calf_joint": 50.0,
+        "ankle_pitch_joint": 50.0,
+        "ankle_roll_joint": 25.0
+      }
+    },
+    "domain_rand": {
+      "add_action_delay": true,
+      "added_mass_range": [
+        -0.5,
+        0.5
+      ],
+      "dynamic_randomization": 0.0,
+      "friction_range": [
+        0.6,
+        1.2
+      ],
+      "max_push_avel_xyz": 0.3,
+      "max_push_vel_xyz": 0.3,
+      "obs_noise_scale": 0.01,
+      "push_interval_s": 5,
+      "push_robots": true,
+      "randomize_base_mass": true,
+      "randomize_friction": true
+    },
+    "env": {
+      "debug": false,
+      "env_spacing": 2.0,
+      "episode_length": 150,
+      "num_actions": 12,
+      "num_envs": 4096,
+      "num_observations": 43,
+      "num_privileged_obs": null,
+      "obs_history_len": 5,
+      "play": false,
+      "reference_state_initialization": true
+    },
+    "init_member_classes": {},
+    "init_state": {
+      "added_height": 0.0,
+      "ang_vel": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "default_joint_angles": {
+        "01_r_hip_pitch_joint": 0,
+        "02_r_hip_roll_joint": 0,
+        "03_r_thigh_joint": 0,
+        "04_r_calf_joint": 0,
+        "05_r_ankle_pitch_joint": 0,
+        "06_r_ankle_roll_joint": 0,
+        "07_l_hip_pitch_joint": 0,
+        "08_l_hip_roll_joint": 0,
+        "09_l_thigh_joint": 0,
+        "10_l_calf_joint": 0,
+        "11_l_ankle_pitch_joint": 0,
+        "12_l_ankle_roll_joint": 0
+      },
+      "lin_vel": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "pos": [
+        0.0,
+        0.0,
+        0.345
+      ],
+      "rot": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    "motion_loader": {
+      "motion_files": "{ROOT_DIR}/resources/datasets/pi/Walk.txt"
+    },
+    "rewards": {
+      "soft_dof_pos_limit": 0.9,
+      "terms": {
+        "joint_targets_rate": [
+          5.0,
+          0.0
+        ],
+        "track_base_height": [
+          0.1,
+          0.0
+        ],
+        "track_base_orientation": [
+          0.5,
+          0.0
+        ],
+        "track_base_vel": [
+          1.0,
+          0.0
+        ],
+        "track_ee_pos": [
+          0.25,
+          0.0
+        ],
+        "track_joint_pos": [
+          1.8,
+          0.0
+        ]
+      }
+    },
+    "seed": 42,
+    "sim": {
+      "dt": 0.005,
+      "gravity": [
+        0.0,
+        0.0,
+        -9.81
+      ],
+      "physx": {
+        "bounce_threshold_velocity": 0.5,
+        "contact_collection": 2,
+        "contact_offset": 0.01,
+        "default_buffer_size_multiplier": 5,
+        "max_depenetration_velocity": 1.0,
+        "max_gpu_contact_pairs": 8388608,
+        "num_position_iterations": 4,
+        "num_threads": 10,
+        "num_velocity_iterations": 0,
+        "rest_offset": 0.0,
+        "solver_type": 1
+      },
+      "substeps": 1,
+      "up_axis": 1
+    },
+    "termination": {
+      "max_base_ang_vel": 100.0,
+      "max_base_lin_vel": 10.0,
+      "max_height": 3.0
+    },
+    "terrain": {
+      "dynamic_friction": 1.0,
+      "mesh_type": "plane",
+      "restitution": 0.0,
+      "static_friction": 1.0
+    },
+    "viewer": {
+      "camera_env": 0,
+      "camera_height": 720,
+      "camera_horizontal_fov": 75.0,
+      "camera_pos_b": [
+        2.0,
+        2.0,
+        2
+      ],
+      "camera_width": 960,
+      "enable_viewer": false,
+      "overview": true,
+      "overview_lookat": [
+        50,
+        50,
+        2
+      ],
+      "overview_pos": [
+        -5,
+        -5,
+        4
+      ],
+      "record_camera_imgs": false,
+      "ref_env": 0,
+      "ref_lookat": [
+        0,
+        0,
+        0.5
+      ],
+      "ref_pos_b": [
+        2,
+        2,
+        1
+      ],
+      "vis_flag": [
+        "ref_only"
+      ]
+    }
+  }
+}
