@@ -22,7 +22,29 @@ This project implements a **DeepMimic**-style motion imitation pipeline for a sm
 | **2. Observation Redesign** | The policy is retrained using only onboard-available signals (projected gravity, angular velocity, joint states, action history) plus a 5-step observation history — removing privileged state like ground-truth yaw and linear velocity. |
 | **3. Domain Randomization & Sim2Sim** | Friction, base mass, and random external pushes are varied during training. The final policy is evaluated in MuJoCo under perturbed physical parameters. |
 
+## Training Monitoring
+
+Training is monitored in real time using [Weights & Biases](https://wandb.ai). The W&B dashboard provides four panels:
+
+| Panel | What it shows |
+|-------|---------------|
+| **Learn** | Policy/value loss, learning rate schedule, action standard deviation. A healthy run shows decreasing loss and std over time. |
+| **Train** | Mean episode length and cumulative episode reward. Episode length should plateau as the policy learns to survive full cycles. |
+| **Episode** | Per-step average of each reward term and the total reward. Useful for diagnosing which reward component is lagging. |
+| **Media** | Periodically recorded matplotlib animations of the robot during training, allowing visual inspection of policy progress. |
+
+<p align="center">
+  <img src="animRL/resources/images/learning_curve.png" width="600" alt="W&B learning curves">
+</p>
+
 ## Results
+
+Each stage is evaluated by running a full episode in Isaac Gym. The evaluation script (`eval.py`) produces:
+- **animation.mp4** — a matplotlib animation of the robot replaying the learned policy
+- **eval_rewards.png** — per-step reward breakdown across all reward terms
+- **eval_buf.json** — raw observations, actions, rewards, and done flags for further analysis
+
+The GIFs below are converted from these evaluation animations.
 
 ### Stage 1 — Motion Imitation (Isaac Gym, full state)
 
@@ -30,7 +52,7 @@ This project implements a **DeepMimic**-style motion imitation pipeline for a sm
   <img src="assets/stage1_imitation.gif" width="400" alt="Stage 1: motion imitation">
 </p>
 
-All reward terms converge close to 1.0, indicating accurate tracking of joint angles, base height, orientation, velocity, and end-effector positions.
+With full simulator state available (base velocity, orientation quaternion, height), all reward terms converge close to 1.0 — accurate tracking of joint angles, base height, orientation, velocity, and end-effector positions.
 
 <p align="center">
   <img src="assets/rewards_stage1.png" width="500" alt="Stage 1 reward curves">
@@ -42,7 +64,7 @@ All reward terms converge close to 1.0, indicating accurate tracking of joint an
   <img src="assets/stage2_onboard_obs.gif" width="400" alt="Stage 2: onboard observation">
 </p>
 
-Using only deployment-realistic observations (no ground-truth yaw or linear velocity), the policy retains high-quality imitation.
+Privileged signals (ground-truth yaw, linear velocity) are removed. The policy relies on projected gravity, angular velocity, joint states, and a 5-step observation history to infer the missing state. Despite the reduced information, imitation quality remains high.
 
 <p align="center">
   <img src="assets/rewards_stage2.png" width="500" alt="Stage 2 reward curves">
@@ -54,7 +76,7 @@ Using only deployment-realistic observations (no ground-truth yaw or linear velo
   <img src="assets/stage3_domain_rand.gif" width="400" alt="Stage 3: domain randomization">
 </p>
 
-With domain randomization, the policy shows slightly noisier per-step rewards but maintains robust walking that transfers to MuJoCo.
+Domain randomization (friction, mass, random pushes) introduces noisier per-step rewards during evaluation, but the policy learns a more conservative and robust gait. This is the key stage enabling successful transfer — the same checkpoint is deployed in MuJoCo (`sim2sim.py`) with multiple robot instances under perturbed physical parameters, and the robot maintains stable walking.
 
 <p align="center">
   <img src="assets/rewards_stage3.png" width="500" alt="Stage 3 reward curves">
